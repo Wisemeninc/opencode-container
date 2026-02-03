@@ -1,0 +1,14 @@
+services:
+  opencode:
+    build:
+      context: .
+      dockerfile: Dockerfile.opencode
+    container_name: opencode
+    ports:
+      - "2222:22"
+    volumes:
+      - ./code_output:/workspace/output
+    environment:
+      - SSH_PASSWORD=password123
+    stdin_open: true
+    tty: true

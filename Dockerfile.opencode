@@ -1,0 +1,42 @@
+FROM debian:bookworm-slim
+
+# Install SSH server and development dependencies
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    git \
+    curl \
+    vim \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install OpenCode
+RUN curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o /tmp/opencode.tar.gz && \
+    mkdir -p /root/.opencode/bin && \
+    tar -xzf /tmp/opencode.tar.gz -C /tmp && \
+    mv /tmp/opencode /root/.opencode/bin/ && \
+    chmod +x /root/.opencode/bin/opencode && \
+    rm /tmp/opencode.tar.gz
+
+# Generate SSH keys for root user
+RUN mkdir -p /root/.ssh && \
+    ssh-keygen -t rsa -f /root/.ssh/id_rsa -N "" -q
+
+# Set root password for SSH access
+RUN echo 'root:password123' | chpasswd
+
+# Add opencode alias to bashrc
+RUN echo 'alias opencode="/root/.opencode/bin/opencode"' >> /root/.bashrc
+
+# Configure SSH
+RUN mkdir -p /run/sshd && \
+    echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config && \
+    echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config && \
+    echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Expose SSH port
+EXPOSE 22
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D", "-e"]
