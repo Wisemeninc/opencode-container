@@ -33,27 +33,42 @@ opencode
 
 ## Using PAI (Personal AI Infrastructure)
 
-PAI is pre-installed at `/root/.claude`. To configure and customize:
+PAI v2.5 is pre-installed at `/root/.claude` and automatically enhances OpenCode with additional capabilities. When you run `opencode`, it reads the PAI configuration from `~/.claude` to provide:
 
-### Run PAI Configuration Wizard
+- **Skills System** - Specialized capabilities (research, OSINT, web assessment, etc.)
+- **Agents** - Custom AI agent personalities and configurations
+- **Fabric Patterns** - 240+ content analysis and transformation patterns
+- **Hooks** - Automated behaviors triggered by events
+- **System Prompts** - Customizable behavior templates in `CLAUDE.md`
+
+### How It Works
+
+PAI works by providing context and instructions to OpenCode via the `~/.claude` directory structure. When OpenCode starts, it reads:
+
+1. `~/.claude/CLAUDE.md` - Main system instructions
+2. `~/.claude/skills/` - Available skill definitions
+3. `~/.claude/agents/` - Agent configurations
+
+Simply run `opencode` and PAI's enhancements are automatically available.
+
+### Initial Setup (Optional)
+
+To customize PAI with your name and preferences:
 
 ```bash
 cd /root/.claude
 bun run INSTALL.ts
 ```
 
-### PAI Features
-
-- **Skills System** - Specialized capabilities in `/root/.claude/skills/`
-- **Agents** - Custom AI agent configurations
-- **Fabric Patterns** - 240+ content analysis patterns
-- **System Prompts** - Customizable behavior templates
-
 ### PAI Documentation
 
 See the PAI skill files in `/root/.claude/skills/PAI/` for detailed documentation:
 - `SKILL.md` - Core system overview
 - `PAI_ARCHITECTURE.md` - Technical architecture
+
+### Note on pai CLI
+
+PAI includes a `pai` CLI tool (`~/.claude/skills/PAI/Tools/pai.ts`) designed for Claude Code. This tool is not compatible with OpenCode and should not be used. Use `opencode` directly instead.
 
 ## Volume Mounts
 

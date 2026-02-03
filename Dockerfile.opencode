@@ -38,7 +38,6 @@ RUN echo 'root:password123' | chpasswd
 
 # Add aliases to bashrc
 RUN echo 'alias opencode="/root/.opencode/bin/opencode"' >> /root/.bashrc && \
-    echo 'alias pai="cd /root/.claude && bun run INSTALL.ts"' >> /root/.bashrc && \
     echo 'export PATH="/root/.bun/bin:$PATH"' >> /root/.bashrc
 
 # Configure SSH
